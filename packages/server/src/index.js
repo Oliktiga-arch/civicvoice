@@ -38,39 +38,41 @@ const connectDB = async () => {
 };
 
 // Configure Passport Google Strategy
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/v1/auth/google/callback',
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        // Find or create user
-        const email = profile.emails?.[0]?.value;
-        if (!email) {
-          return done(new Error('No email found in profile'), false);
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: '/api/v1/auth/google/callback',
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          // Find or create user
+          const email = profile.emails?.[0]?.value;
+          if (!email) {
+            return done(new Error('No email found in profile'), false);
+          }
+
+          let user = await User.findOne({ email });
+
+          if (!user) {
+            user = await User.create({
+              email,
+              name: profile.displayName || 'Unknown',
+              role: 'mediator', // Default role for OAuth users
+              avatar: profile.photos?.[0]?.value,
+            });
+          }
+
+          done(null, user);
+        } catch (error) {
+          done(error, false);
         }
-
-        let user = await User.findOne({ email });
-
-        if (!user) {
-          user = await User.create({
-            email,
-            name: profile.displayName || 'Unknown',
-            role: 'mediator', // Default role for OAuth users
-            avatar: profile.photos?.[0]?.value,
-          });
-        }
-
-        done(null, user);
-      } catch (error) {
-        done(error, false);
       }
-    }
-  )
-);
+    )
+  );
+}
 
 // Security middleware
 app.use(helmet());
