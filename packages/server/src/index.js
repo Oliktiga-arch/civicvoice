@@ -89,7 +89,12 @@ app.use(limiter);
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: [
+      process.env.CLIENT_URL || 'https://civicvoice-my-react-app-phvd.vercel.app',
+      'http://localhost:5174', // development
+      'http://localhost:3000'  // alternative dev port
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
 );
