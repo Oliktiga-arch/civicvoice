@@ -3,12 +3,39 @@ import ReportForm from './components/ReportForm';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
+  const [reports, setReports] = useState([]);
+  const [searchLat, setSearchLat] = useState('');
+  const [searchLng, setSearchLng] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
   const tabs = [
     { id: 'home', label: 'Home' },
     { id: 'report', label: 'Report Issue' },
     { id: 'view', label: 'View Reports' },
   ];
+
+  const handleSearchReports = async () => {
+    if (!searchLat || !searchLng) {
+      alert('Please enter both latitude and longitude');
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await fetch(`https://civicvoice-7.onrender.com/api/v1/reports?lat=${searchLat}&lng=${searchLng}`);
+      if (response.ok) {
+        const data = await response.json();
+        setReports(data.data.reports || []);
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.message}`);
+      }
+    } catch (error) {
+      alert('Error fetching reports: ' + error.message);
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -42,17 +69,25 @@ function App() {
                         <input
                           type="number"
                           placeholder="Latitude"
+                          value={searchLat}
+                          onChange={(e) => setSearchLat(e.target.value)}
                           className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                         <input
                           type="number"
                           placeholder="Longitude"
+                          value={searchLng}
+                          onChange={(e) => setSearchLng(e.target.value)}
                           className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
                     </div>
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                      🔍 Search Reports
+                    <button
+                      onClick={handleSearchReports}
+                      disabled={isSearching}
+                      className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:cursor-not-allowed"
+                    >
+                      {isSearching ? '🔍 Searching...' : '🔍 Search Reports'}
                     </button>
                   </div>
                 </div>
@@ -83,17 +118,35 @@ function App() {
                 </div>
               </div>
 
-              <div className="mt-8 text-center">
-                <div className="bg-gray-50 rounded-xl p-8 border-2 border-dashed border-gray-300">
-                  <div className="text-6xl mb-4">🗺️</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Interactive Map Coming Soon
-                  </h3>
-                  <p className="text-gray-600">
-                    View reports on an interactive map and find issues near you
-                  </p>
+              {reports.length > 0 && (
+                <div className="mt-8">
+                  <h3 className="text-xl font-semibold mb-4">Found Reports</h3>
+                  <div className="space-y-4">
+                    {reports.map((report) => (
+                      <div key={report._id} className="bg-white p-4 rounded-lg shadow border">
+                        <h4 className="font-semibold">{report.title}</h4>
+                        <p className="text-gray-600">{report.description}</p>
+                        <p className="text-sm text-gray-500">Category: {report.category}</p>
+                        <p className="text-sm text-gray-500">Status: {report.status}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {reports.length === 0 && !isSearching && (
+                <div className="mt-8 text-center">
+                  <div className="bg-gray-50 rounded-xl p-8 border-2 border-dashed border-gray-300">
+                    <div className="text-6xl mb-4">🗺️</div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      Search for Reports
+                    </h3>
+                    <p className="text-gray-600">
+                      Enter your location above to find reports near you
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );
