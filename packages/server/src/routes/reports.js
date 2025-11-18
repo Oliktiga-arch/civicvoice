@@ -1,11 +1,11 @@
 import express from 'express';
 import multer from 'multer';
 import { z } from 'zod';
-import Report from '../models/Report';
-import Comment from '../models/Comment';
-import { protect, authorize } from '../middleware/auth';
-import { uploadToCloudinary, deleteFromCloudinary, getPublicIdFromUrl } from '../services/cloudinary';
-import { emitNewReport } from '../services/socket';
+import Report from '../models/Report.js';
+import Comment from '../models/Comment.js';
+import { protect, authorize } from '../middleware/auth.js';
+import { uploadToCloudinary, deleteFromCloudinary, getPublicIdFromUrl } from '../services/cloudinary.js';
+import { emitNewReport } from '../services/socket.js';
 
 const router = express.Router();
 

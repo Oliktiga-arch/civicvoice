@@ -1,10 +1,10 @@
 import express from 'express';
 import passport from 'passport';
 import { z } from 'zod';
-import User from '../models/User';
-import { hashPassword, comparePassword } from '../utils/auth';
-import { generateToken } from '../utils/jwt';
-import { protect } from '../middleware/auth';
+import User from '../models/User.js';
+import { hashPassword, comparePassword } from '../utils/auth.js';
+import { generateToken } from '../utils/jwt.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 

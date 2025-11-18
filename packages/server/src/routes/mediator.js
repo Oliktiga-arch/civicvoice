@@ -1,7 +1,7 @@
 import express from 'express';
-import Report from '../models/Report';
-import Resolution from '../models/Resolution';
-import { protect, authorize } from '../middleware/auth';
+import Report from '../models/Report.js';
+import Resolution from '../models/Resolution.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 

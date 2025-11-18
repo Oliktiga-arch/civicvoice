@@ -8,11 +8,11 @@ import rateLimit from 'express-rate-limit';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import http from 'http';
-import { initializeSocket } from './services/socket';
-import authRoutes from './routes/auth';
-import reportRoutes from './routes/reports';
-import mediatorRoutes from './routes/mediator';
-import User from './models/User';
+import { initializeSocket } from './services/socket.js';
+import authRoutes from './routes/auth.js';
+import reportRoutes from './routes/reports.js';
+import mediatorRoutes from './routes/mediator.js';
+import User from './models/User.js';
 
 // Load environment variables
 import dotenv from 'dotenv';

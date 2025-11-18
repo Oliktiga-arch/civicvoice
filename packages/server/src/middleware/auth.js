@@ -1,5 +1,5 @@
-import { verifyToken } from '../utils/jwt';
-import UserModel from '../models/User';
+import { verifyToken } from '../utils/jwt.js';
+import UserModel from '../models/User.js';
 
 /**
  * Middleware to protect routes requiring authentication
