@@ -40,7 +40,7 @@ const ReportForm = () => {
         data.append('image', image);
       }
 
-      const response = await fetch('http://localhost:5000/api/v1/reports', {
+      const response = await fetch('https://civicvoice-7.onrender.com/api/v1/reports', {
         method: 'POST',
         body: data,
       });
