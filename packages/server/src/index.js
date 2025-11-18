@@ -89,23 +89,7 @@ app.use(limiter);
 // CORS configuration
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin) return callback(null, true);
-
-      // Whitelist of allowed origins
-      const allowedOrigins = [
-        'https://civicvoice-my-react-app-phvd.vercel.app',
-        'http://localhost:3000', // for development
-        'http://localhost:5174'  // Vite dev server
-      ];
-
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: true, // reflects the request's Origin header
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
