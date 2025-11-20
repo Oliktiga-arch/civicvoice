@@ -2,6 +2,10 @@
 
 An anonymous community reporting & mediation platform aligned with UN SDG 16 (Peace, Justice & Strong Institutions).
 
+## 🚀 Live Demo
+
+[View Live Application](https://civicvoice-my-react-app-phvd.vercel.app/)
+
 ## 🚀 Features
 
 - **Anonymous Reporting**: Citizens can report issues without revealing their identity
